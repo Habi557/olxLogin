@@ -1,5 +1,5 @@
 server:
- port: 8000
+ port: ${SERVER_PORT:9092}
  servlet:
     session:
       timeout: 30m
@@ -54,8 +54,6 @@ spring:
       host: localhost
       port: 27017
       database: olx_login        
-  profiles:
-    active: dev
 management:
   endpoints:
     web:
@@ -87,7 +85,8 @@ springdoc:
  api-docs:
   enabled: true
  swagger-ui:
-  enabled: true      
+  enabled: true
+      
       
       
  
