@@ -45,7 +45,7 @@ pipeline {
                   //  docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
                       //  docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
                        sh 'docker-compose up -d'
-                    }
+                    //}
                 }
             }
         }
