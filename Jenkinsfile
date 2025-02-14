@@ -31,7 +31,9 @@ pipeline {
             steps {
 				echo 'Build Docker Image!'
                 script {
-                    docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
+                   // docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
+                    sh "docker build -t ${DOCKER_IMAGE} ."
+
                 }
             }
         }
@@ -40,8 +42,9 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
+                  //  docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                      //  docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
+                       sh 'docker-compose up -d'
                     }
                 }
             }
