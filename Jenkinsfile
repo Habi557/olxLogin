@@ -19,6 +19,7 @@ pipeline {
 
         // Stage 2: Build the application
         stage('Build') {
+			echo 'maveen cleaning step!'
             steps {
                 sh 'mvn clean package' // For Maven
                 // sh './gradlew build' // For Gradle
@@ -28,6 +29,7 @@ pipeline {
         // Stage 3: Build Docker image
         stage('Build Docker Image') {
             steps {
+				echo 'Build Docker Image!'
                 script {
                     docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
                 }
