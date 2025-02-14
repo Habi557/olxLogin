@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.olx.user.exceptionfilters.AccessDenied;
 import com.olx.user.exceptionfilters.CustomAuthenticationEntryPoint;
 
 @Configuration
@@ -31,6 +32,8 @@ public class SecurityConfig {
 	UserDetailsService userDetailsService;
 	@Autowired
 	JwtAuthFilter jwtAuthFilter;
+	@Autowired
+	AccessDenied accessDenied;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 	public SecurityConfig(CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
 		super();
@@ -59,12 +62,12 @@ public class SecurityConfig {
 			auth
 			//.requestMatchers("/zensar/create").hasAnyRole("ADMIN")
 			//.requestMatchers("/zensar/").permitAll()
-			.requestMatchers("/olx/user/authenticate").permitAll()
+			//.requestMatchers("/olx/user/authenticate").permitAll()
 			.requestMatchers("/olx/user/register").hasAnyRole("ADMIN")
-			.requestMatchers("/olx/user/forgetpassword/**").permitAll()
-			.requestMatchers("/olx/user/verifyotp/**").permitAll()
-			.requestMatchers("/olx/user/token/validate").permitAll()
-			.requestMatchers("/olxlogin/**").permitAll()
+//			.requestMatchers("/olx/user/forgetpassword/**").permitAll()
+//			.requestMatchers("/olx/user/verifyotp/**").permitAll()
+//			.requestMatchers("/olx/user/token/validate").permitAll()
+			.requestMatchers("/olx/user/**").permitAll()
 			.requestMatchers(
 					"/swagger-ui/**",   // Swagger UI resources
 		            "/v3/api-docs/**",  // OpenAPI docs
@@ -73,8 +76,9 @@ public class SecurityConfig {
 		})
 		//.formLogin(Customizer.withDefaults())
 		//AuthenticationEntryPoint
-		.exceptionHandling(exceptions -> exceptions
-                .authenticationEntryPoint(customAuthenticationEntryPoint)
+		.exceptionHandling(exceptions -> {exceptions
+                .authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(accessDenied);
+                }
             )
 
 		.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -105,7 +109,7 @@ public class SecurityConfig {
 	
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
-	    return new WebMvcConfigurer() {
+		return new WebMvcConfigurer() {
 	        @Override
 	        public void addCorsMappings(CorsRegistry registry) {
 	            registry.addMapping("/**").allowedOrigins("*");

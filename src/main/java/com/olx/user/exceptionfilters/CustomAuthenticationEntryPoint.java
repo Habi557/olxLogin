@@ -24,12 +24,13 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
         // Create custom error message
         Map<String, Object> errorResponse = new HashMap<>();
-        errorResponse.put("error", "Invalid Token");
+        errorResponse.put("error", "Invalid Token1");
         errorResponse.put("message", authException.getMessage());
         errorResponse.put("path", request.getRequestURI());
         errorResponse.put("timestamp", System.currentTimeMillis());
 
         // Write the JSON response
         ObjectMapper objectMapper = new ObjectMapper();
-        response.getWriter().write(objectMapper.writeValueAsString(errorResponse));    }
+        response.getWriter().write(objectMapper.writeValueAsString(errorResponse)); 
+        }
 }

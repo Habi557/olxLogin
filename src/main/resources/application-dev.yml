@@ -1,18 +1,14 @@
 server:
- port: ${SERVER_PORT:9092}
- servlet:
+  port: 8082
+  servlet:
     session:
       timeout: 30m
       cookie:
         max-age: 30m
-      
-           
+
 spring:
   application:
-   name: olx-Login
-#  config:
-#      import:
-#        - configserver:http://localhost:8888     
+    name: olx-Login
   mail:
     host: smtp.gmail.com
     port: 587
@@ -24,22 +20,8 @@ spring:
           auth: true
           starttls:
             enable: true
-          
-              
-   
-#  Email config
-#spring.mail.host=smtp.gmail.com
-#spring.mail.port=587
-#spring.mail.username=
-#spring.mail.password= 
-#spring.mail.properties.mail.smtp.auth=true
-#spring.mail.properties.mail.smtp.starttls.enable=true 
-
-
-
-   
   datasource:
-    url: jdbc:mysql://localhost:3306/olx_login
+    url: ${SPRING_DATASOURCE_URL}
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
@@ -48,48 +30,43 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect 
+        dialect: org.hibernate.dialect.MySQL8Dialect
   data:
     mongodb:
-      host: localhost
+      host: mongodb
       port: 27017
-      database: olx_login        
+      database: olx_login
+  security:
+   oauth2:
+    client:
+     registration:
+       my-oauth2-client:
+         provider: my-auth-server
+         client-id: my-client-id
+         client-secret: my-client-secret			
+
 management:
   endpoints:
     web:
       base-path: /olxlogin
       exposure:
         include:
-        - "*" 
-#        exclude:
-#        - "beans"
+          - "*"
   endpoint:
     health:
       enabled: true
       show-details: always
     shutdown:
-      enabled: true 
+      enabled: true
 
-  zipkin:
-    tracing:
-      endpoint: http://localhost:9411/api/v2/spans
-  tracing:
-    sampling:
-      probability: 1.0  
 logging:
   level:
     org:
       springframework:
-        security: DEBUG       
-springdoc:
- api-docs:
-  enabled: true
- swagger-ui:
-  enabled: true
-      
-      
-      
- 
+        security: DEBUG
 
-  
-           
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true

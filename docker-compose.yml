@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: olx_login
+      MYSQL_ROOT_PASSWORD: 786786786
+     # MYSQL_USER: root
+      #MYSQL_PASSWORD: 786786786
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - app-network
+
+  springboot-app:
+    image: olx-login-image
+    ports:
+     - "8082:8082"  # This maps container port 8080 to host port 8080
+    environment:
+      MAIL_PASSWORD: obrljvofqymhtpbd
+      MAIL_USERNAME: habibullashaik9944@gmail.com
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: 786786786
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/olx_login
+    depends_on:
+      - mysql
+      - mongodb
+    networks:
+      - app-network
+
+volumes:
+  mysql_data:
+  mongodb_data:
+
+networks:
+  app-network:
+    driver: bridge

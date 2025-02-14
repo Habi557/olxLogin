@@ -143,16 +143,17 @@ public class LoginServiceImpl implements LoginService {
 				if (jwtUtils.validateToken(token, userDetails)) {
 					BlackListedTokensDocument findByToken = blackListedTokens.findByToken(authHeader);
 					if (findByToken == null) {
-						String authorities = userDetails.getAuthorities().toString();
-						String roleArray[] = expectedRoles.split(",");
-						for (String role : roleArray) {
-							if (authorities.contains(role)) {
-								// return new ResponseEntity<Boolean>(true, HttpStatus.OK);
-								return true;
-							}
-						}
+//						String authorities = userDetails.getAuthorities().toString();
+//						String roleArray[] = expectedRoles.split(",");
+//						for (String role : roleArray) {
+//							if (authorities.contains(role)) {
+//								return true;
+//							}
+//						}
+						return true;
 
-					} else {
+					}
+					else {
 						return false;
 					}
 
