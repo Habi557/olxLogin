@@ -19,8 +19,8 @@ pipeline {
 
         // Stage 2: Build the application
         stage('Build') {
-			echo 'maveen cleaning step!'
             steps {
+							echo 'maveen cleaning step!'
                 sh 'mvn clean package' // For Maven
                 // sh './gradlew build' // For Gradle
             }
