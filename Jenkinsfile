@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    tools {
+		    maven 'myMaven'  // Use the name you set in Jenkins
+
+	}
 
     environment {
         // Define environment variables
