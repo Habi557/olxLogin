@@ -26,6 +26,8 @@ pipeline {
         stage('Build') {
             steps {
 							echo 'maveen cleaning step!'
+							                sh 'mvn -version'  // Uses the 'myMaven' installation
+
                 sh 'clean package' // For Maven
                 // sh './gradlew build' // For Gradle
             }
