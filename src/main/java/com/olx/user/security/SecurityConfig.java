@@ -1,8 +1,11 @@
 package com.olx.user.security;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
@@ -14,15 +17,26 @@ import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.olx.user.dto.UserDto;
+import com.olx.user.entity.UserEntity;
 import com.olx.user.exceptionfilters.AccessDenied;
 import com.olx.user.exceptionfilters.CustomAuthenticationEntryPoint;
+import com.olx.user.repo.UserRepository;
 
 @Configuration
 public class SecurityConfig {
@@ -34,6 +48,10 @@ public class SecurityConfig {
 	JwtAuthFilter jwtAuthFilter;
 	@Autowired
 	AccessDenied accessDenied;
+	@Autowired
+	JwtUtils jwtUtils;
+	@Autowired
+	UserRepository userRepository;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 	public SecurityConfig(CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
 		super();
@@ -57,23 +75,44 @@ public class SecurityConfig {
 	//Authorization
 	@Bean
 	public SecurityFilterChain authorize(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.csrf(csrf->csrf.disable())
+		httpSecurity
+		.csrf(csrf->csrf.disable())
 		.authorizeHttpRequests(auth-> {
 			auth
-			//.requestMatchers("/zensar/create").hasAnyRole("ADMIN")
-			//.requestMatchers("/zensar/").permitAll()
-			//.requestMatchers("/olx/user/authenticate").permitAll()
 			.requestMatchers("/olx/user/register").hasAnyRole("ADMIN")
-//			.requestMatchers("/olx/user/forgetpassword/**").permitAll()
-//			.requestMatchers("/olx/user/verifyotp/**").permitAll()
-//			.requestMatchers("/olx/user/token/validate").permitAll()
-			.requestMatchers("/olx/user/**").permitAll()
+		.requestMatchers("/olx/user/**").permitAll()
+		.requestMatchers(HttpMethod.OPTIONS,"/login/oauth2/code/google").permitAll()
+			//.requestMatchers("/**").permitAll()
 			.requestMatchers(
-					"/swagger-ui/**",   // Swagger UI resources
-		            "/v3/api-docs/**",  // OpenAPI docs
+					"/swagger-ui/**",  
+		            "/v3/api-docs/**",  
 		            "/swagger-ui.html" 					).permitAll()
 			.anyRequest().authenticated();
 		})
+		  .oauth2Login(oauth2 -> oauth2
+	                .userInfoEndpoint(userInfo -> userInfo
+	                    .oidcUserService(this.oidcUserService()) // Use OIDC user service
+	                )
+	                .successHandler((request, response, authentication) -> {
+	                    // Generate JWT token after OAuth2 login
+	                    OidcUser oidcUser = (OidcUser) authentication.getPrincipal();
+	                    String jwtToken = jwtUtils.generateToken(oidcUser.getFullName()); // Generate JWT
+	                    List<UserEntity> byEmail = userRepository.findByEmail(oidcUser.getEmail());
+	                  
+	                    if(byEmail.size()>0) {
+
+	                    	userRepository.delete(byEmail.get(0));
+	                    	
+	                    }
+                   	 UserEntity userEntity = new UserEntity(oidcUser.getName(),oidcUser.getFamilyName(),oidcUser.getFullName(),"Test",oidcUser.getEmail());
+                     userEntity.setToken(jwtToken);
+	                 userEntity.setRoles("ROLE_USER");
+                 	 userRepository.save(userEntity);
+
+	                   
+	                    response.sendRedirect("http://localhost:4200/dashboard?token=" + jwtToken); // Redirect with token
+	                })
+	            )
 		//.formLogin(Customizer.withDefaults())
 		//AuthenticationEntryPoint
 		.exceptionHandling(exceptions -> {exceptions
@@ -113,9 +152,15 @@ public class SecurityConfig {
 	        @Override
 	        public void addCorsMappings(CorsRegistry registry) {
 	            registry.addMapping("/**").allowedOrigins("*");
+	            
 	        }
 	    };
 	}
+	 @Bean
+	    public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
+	        return new OidcUserService(); // Default OIDC user service
+	    }
+	
 
 	
 

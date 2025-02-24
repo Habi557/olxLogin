@@ -4,7 +4,8 @@ pipeline {
     environment {
         // Define environment variables
         APP_NAME = "olx-login"
-        DOCKER_IMAGE = "Habibulla/${olx-login-image}"
+       // DOCKER_IMAGE = "Habibulla/${olx-login-image}"
+       DOCKER_IMAGE = "Habibulla/${APP_NAME}-image"
         DOCKER_TAG = "latest"
         
     }
@@ -32,7 +33,9 @@ pipeline {
 				echo 'Build Docker Image!'
                 script {
                    // docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
-                    sh "docker build -t ${DOCKER_IMAGE} ."
+                   // sh "docker build -t ${DOCKER_IMAGE} ."
+                   sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+
 
                 }
             }
@@ -44,8 +47,10 @@ pipeline {
                 script {
                   //  docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
                       //  docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
-                       sh 'docker-compose up -d'
+                      // sh 'docker-compose up -d'
                     //}
+                      sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
+
                 }
             }
         }
