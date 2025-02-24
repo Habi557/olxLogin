@@ -22,7 +22,7 @@ pipeline {
         stage('Build') {
             steps {
 							echo 'maveen cleaning step!'
-                sh 'mvn clean package' // For Maven
+                sh 'clean package' // For Maven
                 // sh './gradlew build' // For Gradle
             }
         }
