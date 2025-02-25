@@ -18,7 +18,9 @@ pipeline {
 		//Delete the workspace
 		stage('Delete Workspace'){
 			steps {
-				cleanWs()
+				//cleanWs()
+				   sh 'rm -rf *'  // Delete all files and directories in the workspace
+
 			}
 			
 		}
