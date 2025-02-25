@@ -15,6 +15,13 @@ pipeline {
     }
 
     stages {
+		//Delete the workspace
+		stage('Delete Workspace'){
+			steps {
+				cleanWs()
+			}
+			
+		}
         // Stage 1: Checkout code
         stage('Checkout') {
             steps {
