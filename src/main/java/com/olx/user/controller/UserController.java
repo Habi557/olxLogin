@@ -133,6 +133,7 @@ public class UserController {
 	@GetMapping("/forgetpassword/{email}")
 	public ResponseEntity<Boolean> validateUserName(@PathVariable("email") String email){
 		Boolean validateEmail = loginServiceImpl.validateUserName(email);
+		System.out.println("Test");
 		if(validateEmail) {
 			return new ResponseEntity<Boolean>(true,HttpStatus.OK);
 		}
