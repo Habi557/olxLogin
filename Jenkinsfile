@@ -10,10 +10,15 @@ pipeline {
         APP_NAME = "olx-login"
        // DOCKER_IMAGE = "Habibulla/${olx-login-image}"
        DOCKER_IMAGE = "Habibulla/${APP_NAME}-image"
-        DOCKER_TAG = "latest"
+       DOCKER_TAG = "latest"
+       MAIL_PASSWORD = "obrljvofqymhtpbd"
+       MAIL_USERNAME = "habibullashaik9944@gmail.com"
+       MYSQL_PASSWORD = "786786786"
+       MYSQL_USERNAME = "root"
+       SPRING_DATASOURCE_URL = "jdbc:mysql://localhost:3306/olx_login"
+        
         
     }
-
     stages {
 		//Delete the workspace
 		stage('Delete Workspace'){
