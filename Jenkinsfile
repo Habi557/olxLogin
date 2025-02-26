@@ -15,8 +15,7 @@ pipeline {
        MAIL_USERNAME = "habibullashaik9944@gmail.com"
        MYSQL_PASSWORD = "786786786"
        MYSQL_USERNAME = "root"
-       SPRING_DATASOURCE_URL = "jdbc:mysql://localhost:3306/olx_login"
-        
+       SPRING_DATASOURCE_URL = "jdbc:mysql://localhost:3306/olx_login"       
         
     }
     stages {
