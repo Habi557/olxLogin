@@ -37,13 +37,14 @@ spring:
       port: 27017
       database: olx_login
   security:
-   oauth2:
-    client:
-     registration:
-       my-oauth2-client:
-         provider: my-auth-server
-         client-id: my-client-id
-         client-secret: my-client-secret			
+    oauth2:
+      client:
+        registration:
+          google: 
+            redirect-uri: ${redirect-uri}
+            client-id: ${oauth2_client_id}
+            client-secret: ${oaut2_client_secret}
+          #redirect-url: localhost:8082/login/oauth2/code/google.
 
 management:
   endpoints:
