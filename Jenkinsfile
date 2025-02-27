@@ -4,6 +4,9 @@ pipeline {
 		    maven 'myMaven'  // Use the name you set in Jenkins
 
 	}
+	 triggers {
+        githubPush() // Trigger on GitHub push events
+    }
 
     environment {
         // Define environment variables
