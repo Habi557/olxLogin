@@ -54,8 +54,9 @@ pipeline {
                 script {
                    // docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
                    // sh "docker build -t ${DOCKER_IMAGE} ."
-                   sh "docker --version"
-                   sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                   //sh "docker --version"
+                  // sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                  docker.build("Habibulla/olx-login-image:latest", ".")
 
 
                 }
