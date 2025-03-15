@@ -4,6 +4,13 @@ FROM openjdk:21
 # Step 2: Set the Working Directory
 WORKDIR /app
 
+
+# Use Maven image to build the JAR
+FROM maven:3.8.5-openjdk-21 AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
+
 # Step 3: Copy Application Files
 COPY target/olx-Login-0.0.1-SNAPSHOT.jar olx-login.jar
 
