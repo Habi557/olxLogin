@@ -4,6 +4,13 @@ FROM openjdk:21
 # Step 2: Set the Working Directory
 WORKDIR /app
 
+# Step 2: Install Maven
+FROM base AS build
+RUN apt-get update && apt-get install -y maven
+
+# Step 3: Build the application
+RUN mvn clean package -DskipTests
+
 
 # Step 3: Copy Application Files
 COPY target/olx-Login-0.0.1-SNAPSHOT.jar olx-login.jar
