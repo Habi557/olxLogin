@@ -1,5 +1,6 @@
 package com.olx.user.exception;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.olx.user.dto.ErrorResponse;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
@@ -60,6 +62,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     	errorMap.put("message", "Token Expired Please Login again");
     	ObjectMapper objectMapper = new ObjectMapper();
         return errorMap;          		
+		
+	}
+	@ExceptionHandler(value=RuntimeException.class)
+	public ResponseEntity<ErrorResponse> handleRuntimeExceptions(RuntimeException ex){
+		ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(),"500",500,LocalDateTime.now());
+		return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+		
 		
 	}
 	

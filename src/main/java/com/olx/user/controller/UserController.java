@@ -1,6 +1,7 @@
 package com.olx.user.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.olx.user.dto.UserDto;
 import com.olx.user.dto.UsersDto;
 import com.olx.user.entity.TestEntity;
+import com.olx.user.exception.TokenAlreadyExpired;
 import com.olx.user.security.JwtUtils;
 import com.olx.user.service.LoginService;
 import com.olx.user.service.LoginServiceImpl;
@@ -36,7 +38,6 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/olx/user")
-@CrossOrigin
 public class UserController {
 	 
 	@Autowired
@@ -49,6 +50,8 @@ public class UserController {
 	@Autowired
 	LoginService loginServiceImpl;
 	 Logger logger = LoggerFactory.getLogger(UserController.class);
+	    private int requestCount = 0;
+
 
 	
 	@PostMapping(value="/authenticate" , consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_ATOM_XML_VALUE})
@@ -88,13 +91,13 @@ public class UserController {
 	public ResponseEntity<UserDto> register(@RequestBody UserDto userDto){
 	 return new ResponseEntity<UserDto>(loginServiceImpl.register(userDto), HttpStatus.CREATED);
 	}
-	@GetMapping(value="/user")
-	public ResponseEntity<List<UserDto>> getUser(@RequestHeader("Authorization") String token){
-		List<UserDto> userDtoList = loginServiceImpl.getUser(token);
-		if(userDtoList.size()>0) {
-			 return new ResponseEntity<List<UserDto>>(userDtoList, HttpStatus.ACCEPTED);
+	@GetMapping(value="/getuser")
+	public ResponseEntity<UserDto> getUser(@RequestHeader("Authorization") String token){
+		UserDto userDtoList = loginServiceImpl.getUser(token);
+		if(userDtoList != null) {
+			 return new ResponseEntity<UserDto>(userDtoList, HttpStatus.ACCEPTED);
 		}
-		 return new ResponseEntity<List<UserDto>>(userDtoList, HttpStatus.BAD_REQUEST);
+		 return new ResponseEntity<UserDto>(userDtoList, HttpStatus.BAD_REQUEST);
 
 
 	}
@@ -137,7 +140,7 @@ public class UserController {
 		if(validateEmail) {
 			return new ResponseEntity<Boolean>(true,HttpStatus.OK);
 		}
-		return new ResponseEntity<Boolean>(false,HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<Boolean>(false,HttpStatus.INTERNAL_SERVER_ERROR);
 	
 		
 	}
@@ -154,6 +157,34 @@ public class UserController {
 		}
 		return new ResponseEntity<Boolean>(false,HttpStatus.BAD_REQUEST);		
 	}
+	@PostMapping("/resetpassword")
+	public ResponseEntity<String> resetPassword(@RequestBody Map<String,String> request){
+		String token = request.get("token");
+		String password = request.get("password");
+		Boolean resetPasswordStatus = loginServiceImpl.resetPassword(token,password);
+		if(resetPasswordStatus) {
+			return ResponseEntity.ok("Password reset successful!");
+		}
+		return ResponseEntity.ok("Password reset Unsuccessful!");
+	}
+	@GetMapping("/test-failure")
+	public ResponseEntity<String> fail() {
+        requestCount++;
+        
+        // Simulate failure 80% of the time
+        if (requestCount % 5 != 0) { // Only every 5th request succeeds
+            throw new RuntimeException("Simulated service failure - Request: " + requestCount);
+        }
+        
+        return ResponseEntity.ok("Success! Request: " + requestCount);
+	}
+    @GetMapping("/test-slow")
+    public String slowEndpoint() throws InterruptedException {
+       // Thread.sleep(3000); // 3 second delay
+        return "Slow response after 3 seconds";
+    }
+
+
 	
 	 
 

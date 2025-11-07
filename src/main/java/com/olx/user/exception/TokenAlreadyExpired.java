@@ -5,7 +5,7 @@ public class TokenAlreadyExpired extends RuntimeException{
 	private String message;
 	public TokenAlreadyExpired() {}
 	public TokenAlreadyExpired(String message) {
-		super();
+		super(message);
 		this.message = message;
 	}
 	public String getMessage() {

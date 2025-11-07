@@ -11,14 +11,14 @@ public class UsersDto {
       role: string,
       isactive: boolean
 	 */
-	private String id;
+	private int id;
 	private String name;
 	private String password;
 	private String gender;
 	private String role;
 	private boolean isactive;
 	private String token;
-	public UsersDto(String id, String name, String password, String gender, String role, boolean isactive,String token) {
+	public UsersDto(int id, String name, String password, String gender, String role, boolean isactive,String token) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -28,10 +28,10 @@ public class UsersDto {
 		this.isactive = isactive;
 		this.token=token;
 	}
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getName() {

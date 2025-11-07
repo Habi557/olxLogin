@@ -5,7 +5,7 @@ public class InvalidUser extends RuntimeException {
 	private String message;
 	public InvalidUser() {}
 	public InvalidUser(String message) {
-		super();
+		super(message);
 		this.message = message;
 	}
 	@Override

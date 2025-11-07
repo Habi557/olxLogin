@@ -10,7 +10,7 @@ import com.olx.user.entity.UserEntity;
 
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 	
-	public List<UserEntity> findByUserName(String name);
+	public UserEntity findByUserName(String name);
 	public List<UserEntity> findByEmail(String name);
 	@Query(value = "SELECT * FROM users WHERE BINARY username = :username", nativeQuery = true)
 	List<UserEntity> findByUserNameCaseSensitive(@Param("username") String username);

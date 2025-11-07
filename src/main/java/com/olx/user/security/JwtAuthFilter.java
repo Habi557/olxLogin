@@ -1,6 +1,8 @@
 package com.olx.user.security;
 
 import java.io.IOException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,20 +12,26 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.olx.user.exception.TokenAlreadyExpired;
+
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.impl.DefaultClaims;
+import io.jsonwebtoken.impl.DefaultJwsHeader;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
 	@Autowired
 	private JwtUtils jwtService;
-
 	@Autowired
 	private UserDetailsService userDetailsService;
+//	public JwtAuthFilter(JwtUtils jwtService, UserDetailsService userDetailsService) {
+//		this.jwtService=jwtService;
+//		this.userDetailsService=userDetailsService;
+//	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -31,7 +39,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		String authHeader = request.getHeader("Authorization");
 		String token = null;
 		String username = null;
-		String logout=request.getHeader("logout");
 		try {
 			if (authHeader != null && authHeader.startsWith("Bearer ")) {
 				token = authHeader.substring(7);
@@ -53,11 +60,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			System.out.println("token val");
 			handleExpiredToken(response, e);
 
-		} catch (Exception e) {
-			System.out.println("token val2");
-
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-		}
+		} 
+//		catch (Exception e) {
+//			System.out.println("token val2");
+//
+//			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+//		}
 
 	}
 
@@ -71,6 +79,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	        response.setCharacterEncoding("UTF-8");
 	        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 	        response.getWriter().write(" Token Expired Login again");
+	        
 	}
 
 }

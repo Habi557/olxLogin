@@ -4,6 +4,7 @@ import lombok.Data;
 
 
 public class UserDto {
+private int id;
 private String firstName;
 private String lastName;
 private String userName;
@@ -82,6 +83,15 @@ public int getOtp() {
 public void setOtp(int otp) {
 	this.otp = otp;
 }
+
+public int getId() {
+	return id;
+}
+
+public void setId(int id) {
+	this.id = id;
+}
+
 
 
 

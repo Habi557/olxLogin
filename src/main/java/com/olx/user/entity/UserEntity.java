@@ -18,7 +18,7 @@ private int id;
 private String firstName;
 @Column(name = "lastname")
 private String lastName;
-@Column(name = "username")
+@Column(name = "username", unique = true, nullable = false)
 private String userName;
 @Column(name = "password")
 private String password;

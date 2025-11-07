@@ -12,10 +12,11 @@ public interface LoginService {
 	public UsersDto authenticate(UsersDto userDto);
 	public Boolean logout(Boolean tokenValidity,String token);
 	public UserDto register(UserDto userDto);
-	public List<UserDto> getUser(String token);
+	public UserDto getUser(String token);
 	public Boolean isTokenValid(String token,String expectedRoles);
 	public Boolean validateUserName(String userName);
 	public Boolean validateOtp(int otp,String email);
+	public Boolean resetPassword(String token, String password);
 
 
 
