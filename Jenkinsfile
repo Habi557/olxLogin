@@ -9,16 +9,7 @@ pipeline {
     }
 
     environment {
-        // Define environment variables
-        APP_NAME = "olx-login"
-       // DOCKER_IMAGE = "Habibulla/${olx-login-image}"
-       DOCKER_IMAGE = "Habibulla/${APP_NAME}-image"
-       DOCKER_TAG = "latest"
-       MAIL_PASSWORD = "obrljvofqymhtpbd"
-       MAIL_USERNAME = "habibullashaik9944@gmail.com"
-       MYSQL_PASSWORD = "786786786"
-       MYSQL_USERNAME = "root"
-       SPRING_DATASOURCE_URL = "jdbc:mysql://localhost:3306/olx_login"       
+            
         
     }
     stages {
@@ -37,15 +28,14 @@ pipeline {
         }
 
         // Stage 2: Build the application
-        stage('Build') {
-            steps {
-							echo 'maveen cleaning step!'
-							                sh 'mvn -version'  // Uses the 'myMaven' installation
-
-                sh 'mvn clean package' // For Maven
-                // sh './gradlew build' // For Gradle
-            }
-        }
+        // stage('Build') {
+        //     steps {
+		// 			echo 'maveen cleaning step!'
+		// 			sh 'mvn -version'  // Uses the 'myMaven' installation
+        //             sh 'mvn clean package' 
+               
+        //     }
+        // }
 
         // Stage 3: Build Docker image
         stage('Build Docker Image') {
@@ -56,7 +46,8 @@ pipeline {
                    // sh "docker build -t ${DOCKER_IMAGE} ."
                    //sh "docker --version"
                   // sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
-                  docker.build("Habibulla/olx-login-image:latest", ".")
+                 // docker.build("Habibulla/olx-login-image:latest", ".")
+                 sh "docker build -t olx-login-image ."
 
 
                 }
@@ -67,11 +58,13 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
+                    echo 'Push Docker Image to Registry!'
                   //  docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
                       //  docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
                       // sh 'docker-compose up -d'
                     //}
-                      sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                     // sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
+
 
                 }
             }

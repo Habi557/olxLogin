@@ -9,7 +9,7 @@ server:
            
 spring:
   application:
-   name: olx-Login
+   name: OLX-LOGIN
 #  config:
 #      import:
 #        - configserver:http://localhost:8888     
@@ -55,7 +55,7 @@ spring:
       port: 27017
       database: olx_login        
   profiles:
-    active: dev
+    active: ${PROFILE}
 management:
   endpoints:
     web:

@@ -36,14 +36,14 @@ spring:
       host: mongodb
       port: 27017
       database: olx_login
-  security:
-    oauth2:
-      client:
-        registration:
-          google: 
-            redirect-uri: ${redirect-uri}
-            client-id: ${oauth2_client_id}
-            client-secret: ${oauth2_client_secret}
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          google: 
+#            redirect-uri: ${redirect-uri}
+#            client-id: ${oauth2_client_id}
+#            client-secret: ${oauth2_client_secret}
           #redirect-url: localhost:8082/login/oauth2/code/google.
   thymeleaf:
      prefix: classpath:/templates/
@@ -83,5 +83,3 @@ springdoc:
     enabled: true
 
 frontend-url: http://localhost:4200/resetpassword
-
-
