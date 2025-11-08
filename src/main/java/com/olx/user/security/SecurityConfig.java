@@ -86,7 +86,7 @@ public class SecurityConfig {
 		.requestMatchers("/olx/user/**").permitAll()
 		.requestMatchers("/olx/user/forgetpassword/").permitAll()
         .requestMatchers("/error").permitAll()
-        .requestMatchers("/olx/login/*").permitAll()
+       // .requestMatchers("/olx/login/*").permitAll()
 		.requestMatchers(HttpMethod.OPTIONS,"/login/oauth2/code/google").permitAll()
 			//.requestMatchers("/**").permitAll()
 		.requestMatchers("/olxloginActuator/*").permitAll()
