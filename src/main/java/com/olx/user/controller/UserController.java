@@ -107,31 +107,7 @@ public class UserController {
 		 return new ResponseEntity<Boolean>(loginServiceImpl.isTokenValid(authHeader,expectedRoles), HttpStatus.ACCEPTED);
 
 	}
-		/*@GetMapping(value="/token/validate")
-		public ResponseEntity<Boolean> isTokenValid(@RequestHeader("Authorization") String authHeader,
-				@RequestHeader("EXPECTED_ROLES") String expectedRoles) {
-	 
-	        String token = null;
-	        String username = null;
-			if (authHeader != null && authHeader.startsWith("Bearer ")) {
-	            token = authHeader.substring(7);
-	            username = jwtUtils.extractUsername(token);
-	        }
-			if(username!=null) {
-	            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-	            if (jwtUtils.validateToken(token, userDetails)) {
-	            	String authorities = userDetails.getAuthorities().toString();
-	            	String roleArray[] = expectedRoles.split(",");
-	            	for(String role: roleArray) {
-	            		if(authorities.contains(role)) {
-	            			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
-	            		}
-	            	}
-	            }
-			}
-			return new ResponseEntity<Boolean>(false, HttpStatus.FORBIDDEN);
-			
-		}*/
+	
 	
 	@GetMapping("/forgetpassword/{email}")
 	public ResponseEntity<Boolean> validateUserName(@PathVariable("email") String email){

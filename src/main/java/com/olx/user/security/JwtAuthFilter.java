@@ -61,11 +61,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			handleExpiredToken(response, e);
 
 		} 
-//		catch (Exception e) {
-//			System.out.println("token val2");
-//
-//			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-//		}
 
 	}
 
