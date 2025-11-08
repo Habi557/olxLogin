@@ -65,20 +65,7 @@ public class UserController {
 		 return new ResponseEntity<UsersDto>(HttpStatus.BAD_REQUEST);
 		
 	}
-	/*@PostMapping(value="/authenticate")
-	public ResponseEntity<UserDto> authenticatre(@RequestBody UserDto userDto){
-		try {
-			authenticatonManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getUserName(),userDto.getPassword()));
-			String generateToken = jwtUtils.generateToken(userDto.getUserName());
-			userDto.setToken(generateToken);
-			return new ResponseEntity<UserDto>(userDto,HttpStatus.OK);
 
-		}
-		catch(AuthenticationException e) {
-			return new ResponseEntity<UserDto>(HttpStatus.BAD_REQUEST);
-
-		}
-	}*/
 	
 	@DeleteMapping(value="/logout")
 	public ResponseEntity<Boolean> logout(@RequestHeader("Authorization") String token){
