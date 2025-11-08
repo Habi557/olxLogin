@@ -1,12 +1,14 @@
 pipeline {
     agent any
+      // Force build on every push
+    triggers {
+        githubPush() // Trigger on GitHub push events
+    }
     tools {
 		    maven 'myMaven'  // Use the name you set in Jenkins
 
 	}
-	 triggers {
-        githubPush() // Trigger on GitHub push events
-    }
+	
 
     //environment {
             
