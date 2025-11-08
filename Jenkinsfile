@@ -8,10 +8,10 @@ pipeline {
         githubPush() // Trigger on GitHub push events
     }
 
-    environment {
+    //environment {
             
         
-    }
+    //}
     stages {
 		//Delete the workspace
 		stage('Delete Workspace'){
