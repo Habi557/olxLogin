@@ -25,7 +25,8 @@ pipeline {
         // Stage 1: Checkout code
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Habi557/olxLogin.git'
+                //git branch: 'main', url: 'https://github.com/Habi557/olxLogin.git' // build on main branch
+                checkout scm // build on the branch where the push happened
             }
         }
 
