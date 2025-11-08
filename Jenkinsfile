@@ -26,7 +26,7 @@ pipeline {
         stage('Checkout') {
             steps {
                // git branch: 'main', url: 'https://github.com/Habi557/olxLogin.git'
-                 checkout scm // Checkout the code from the configured SCM
+                  checkout scm // Checkout the code from the configured SCM
             }
         }
 
