@@ -56,7 +56,7 @@ public class UserController {
 	
 	@PostMapping(value="/authenticate" , consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_ATOM_XML_VALUE})
 	public ResponseEntity<UsersDto> authenticate(@RequestBody UsersDto userDto){
-		System.out.println("test for angular application.");
+		System.out.println("test for angular application.........");
 		UsersDto dto=loginServiceImpl.authenticate(userDto);
 		if(dto.getToken() !=null || dto.getToken()!="") {
 			 return new ResponseEntity<UsersDto>(dto, HttpStatus.OK);
