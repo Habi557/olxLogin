@@ -65,14 +65,13 @@ pipeline {
             steps {
                 script {
                     echo 'Push Docker Image to Registry!'
-            
-                     withCredentials([string(credentialsId: 'dockerhub-password', variable: 'DOCKER_PASSWORD')]) {
-                sh """
-                    echo "$DOCKER_PASSWORD" | docker login -u ${DOCKER_HUB_USER} --password-stdin
-                    docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:${BUILD_NUMBER}
-                    docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest
-                """
-            }
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-password', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh """
+        			echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        			docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:${BUILD_NUMBER}
+        			docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest
+    				"""
+}
 
 
                 }
