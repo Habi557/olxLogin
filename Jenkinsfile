@@ -40,6 +40,8 @@ pipeline {
         //     }
         // }
 
+        
+
         // Stage 3: Build Docker image
         stage('Build Docker Image') {
             steps {
