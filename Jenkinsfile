@@ -62,20 +62,15 @@ pipeline {
 
         // Stage 4: Push Docker image to registry (optional)
         stage('Push Docker Image') {
-            steps {
-                script {
-                    echo 'Push Docker Image to Registry!'
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-password', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh """
-        			echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        			docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:${BUILD_NUMBER}
-        			docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest
-    				"""
-}
-
-
-                }
+              steps {
+        script {
+            withCredentials([usernamePassword(credentialsId: 'dockerhub-password', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
+                sh "docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:${BUILD_NUMBER}"
+                sh "docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
             }
+        }
+    }
         }
 
         // Stage 5: Deploy the application (optional)
