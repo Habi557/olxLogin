@@ -51,10 +51,10 @@ pipeline {
                    
                 def tag = env.BUILD_NUMBER   // ✅ Clean way
 
-            sh """
-                docker build -t ${IMAGE_NAME}:${tag} .
-                docker tag ${IMAGE_NAME}:${tag} ${IMAGE_NAME}:latest
-            """
+           sh """
+    docker build -t ${DOCKER_HUB_USER}/${IMAGE_NAME}:${tag} .
+    docker tag ${DOCKER_HUB_USER}/${IMAGE_NAME}:${tag} ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest
+"""
 
 
                 }
