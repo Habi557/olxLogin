@@ -13,6 +13,7 @@ pipeline {
    environment {
         DOCKER_HUB_USER = "habibulla"
         IMAGE_NAME = "olx-login-image"
+        DOCKER_HUB_REPO= "olxloginrepo"
     }
     stages {
 		//Delete the workspace
@@ -66,8 +67,8 @@ pipeline {
         script {
             withCredentials([usernamePassword(credentialsId: 'dockerhub-password', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                 sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
-                sh "docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:${BUILD_NUMBER}"
-                sh "docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
+                sh "docker push ${DOCKER_HUB_USER}/${DOCKER_HUB_REPO}:${BUILD_NUMBER}"
+                sh "docker push ${DOCKER_HUB_USER}/${DOCKER_HUB_REPO}:latest"
             }
         }
     }
