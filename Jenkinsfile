@@ -53,7 +53,7 @@ pipeline {
 
             sh """
                 docker build -t ${IMAGE_NAME}:${tag} .
-                docker tag ${IMAGE_NAME}:${tag}
+                docker tag ${IMAGE_NAME}:${tag} ${IMAGE_NAME}:latest
             """
 
 
@@ -68,7 +68,7 @@ pipeline {
             withCredentials([usernamePassword(credentialsId: 'dockerhub-password', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                 sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
                 sh "docker push ${DOCKER_HUB_USER}/${DOCKER_HUB_REPO}:${BUILD_NUMBER}"
-                //sh "docker push ${DOCKER_HUB_USER}/${DOCKER_HUB_REPO}:latest"
+                sh "docker push ${DOCKER_HUB_USER}/${DOCKER_HUB_REPO}:latest"
             }
         }
     }
