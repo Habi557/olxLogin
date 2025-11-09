@@ -52,8 +52,8 @@ pipeline {
                 def tag = env.BUILD_NUMBER   // ✅ Clean way
 
             sh """
-                docker build -t ${DOCKER_HUB_USER}/${IMAGE_NAME}:${tag} .
-                docker tag ${DOCKER_HUB_USER}/${IMAGE_NAME}:${tag} ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest
+                docker build -t ${IMAGE_NAME}:${tag} .
+                docker tag ${IMAGE_NAME}:${tag}
             """
 
 
@@ -68,7 +68,7 @@ pipeline {
             withCredentials([usernamePassword(credentialsId: 'dockerhub-password', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                 sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
                 sh "docker push ${DOCKER_HUB_USER}/${DOCKER_HUB_REPO}:${BUILD_NUMBER}"
-                sh "docker push ${DOCKER_HUB_USER}/${DOCKER_HUB_REPO}:latest"
+                //sh "docker push ${DOCKER_HUB_USER}/${DOCKER_HUB_REPO}:latest"
             }
         }
     }
