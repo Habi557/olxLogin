@@ -10,10 +10,10 @@ pipeline {
 	}
 	
 
-    //environment {
-            
-        
-    //}
+   environment {
+        DOCKER_HUB_USER = "habibulla"
+        IMAGE_NAME = "olx-login-image"
+    }
     stages {
 		//Delete the workspace
 		stage('Delete Workspace'){
@@ -45,12 +45,13 @@ pipeline {
             steps {
 				echo 'Build Docker Image!'
                 script {
-                   // docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
-                   // sh "docker build -t ${DOCKER_IMAGE} ."
-                   //sh "docker --version"
-                  // sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
-                 // docker.build("Habibulla/olx-login-image:latest", ".")
-                 sh "docker build -t olx-login-image ."
+                   
+                def tag = env.BUILD_NUMBER   // ✅ Clean way
+
+            sh """
+                docker build -t ${DOCKER_HUB_USER}/${IMAGE_NAME}:${tag} .
+                docker tag ${DOCKER_HUB_USER}/${IMAGE_NAME}:${tag} ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest
+            """
 
 
                 }
@@ -62,11 +63,14 @@ pipeline {
             steps {
                 script {
                     echo 'Push Docker Image to Registry!'
-                  //  docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                      //  docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
-                      // sh 'docker-compose up -d'
-                    //}
-                     // sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
+            
+                     withCredentials([string(credentialsId: 'dockerhub-password', variable: 'DOCKER_PASSWORD')]) {
+                sh """
+                    echo "$DOCKER_PASSWORD" | docker login -u ${DOCKER_HUB_USER} --password-stdin
+                    docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:${BUILD_NUMBER}
+                    docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest
+                """
+            }
 
 
                 }
