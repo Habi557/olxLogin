@@ -1,16 +1,6 @@
 package com.olx.user.dto;
 
 public class UsersDto {
-	
-	/*
-	 * id: string,
-    name: string,
-      password: string,
-      email: string,
-      gender: string,
-      role: string,
-      isactive: boolean
-	 */
 	private int id;
 	private String name;
 	private String password;
